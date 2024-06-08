@@ -5,6 +5,8 @@ description: "Day 3, morning interactive session"
 date: 2024-08-07
 format: html
 toc: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 ::: {.callout-note}
@@ -31,17 +33,17 @@ As described in lecture, the Lotka-Volterra models have been used to describe pr
 
 $$\frac{dV}{dt}=r V-\alpha VP$$
 
-From Wikipedia: 
+From Wikipedia (*but parameters changed to match Nicholas Gotelli's, [A Primer of Ecology](https://global.oup.com/academic/product/a-primer-of-ecology-9780878933181?cc=ca&lang=en&)*): 
 
->"The prey are assumed to have an unlimited food supply and to reproduce exponentially, unless subject to predation; this exponential growth is represented in the equation above by the term $\alpha x$. The rate of predation upon the prey is assumed to be proportional to the rate at which the predators and the prey meet, this is represented above by $\beta xy$. If either x or y is zero, then there can be no predation."
+>"The prey are assumed to have an unlimited food supply and to reproduce exponentially, unless subject to predation; this exponential growth is represented in the equation above by the term $\alpha x$. The rate of predation upon the prey is assumed to be proportional to the rate at which the predators and the prey meet, this is represented above by $\alpha VP$. If either $V$ or $P$ is zero, then there can be no predation."
 
 ### iii. Predator equation:
 
 $$\frac{dP}{dt}=\beta VP - qP$$
 
-From Wikipedia: 
+From Wikipedia (*but parameters changed to match Nicholas Gotelli's, [A Primer of Ecology](https://global.oup.com/academic/product/a-primer-of-ecology-9780878933181?cc=ca&lang=en&)*): 
 
->"In this equation, $\delta xy$ represents the growth of the predator population. (Note the similarity to the predation rate; however, a different constant is used, as the rate at which the predator population grows is not necessarily equal to the rate at which it consumes the prey). The term $\gamma y$ represents the loss rate of the predators due to either natural death or emigration, it leads to an exponential decay in the absence of prey.
+>"In this equation, $\beta VP$ represents the growth of the predator population. (Note the similarity to the predation rate; however, a different constant is used, as the rate at which the predator population grows is not necessarily equal to the rate at which it consumes the prey). The term $\delta P$ represents the loss rate of the predators due to either natural death or emigration, it leads to an exponential decay in the absence of prey."
 
 **Where:**
 
@@ -65,18 +67,18 @@ To find an approximate solution in R, we will need four things:
 time <- seq(0, 25, by = 0.05)
 
 # Set some parameter values (these can change - keep it in mind) ----
-parameters <- c(alpha = .75, beta = 0.8, delta = 0.5, gamma = 1)
+parameters <- c(r = .75, alpha = 0.8, beta = 0.5, q = 1)
 
 # Set the initial condition (prey and predator populations at t = 0) ----
-# Recall: x = prey, y = predator
-init_cond <- c(x = 10, y = 4)
+# Recall: V = prey, P = predator
+init_cond <- c(V = 10, P = 4)
 
 # Prepare the series of differential equations as a function ----
 lk_equations <- function(time, init_cond, parameters) {
   with(as.list(c(init_cond, parameters)), {
-    dxdt = alpha * x - beta * x * y
-    dydt = delta * x * y - gamma * y
-    return(list(c(dxdt, dydt)))
+    dVdt = r * V - alpha * V * P
+    dPdt = beta * V * P - q * P
+    return(list(c(dVdt, dPdt)))
   })
 }
 
@@ -86,9 +88,9 @@ approx_lk <- ode(y = init_cond, times = time, func = lk_equations, parms = param
 # Check the class ----
 class(approx_lk)
 
-# We really want this to be a data frame, and we want both prey (x) and predator (y) to be in the same column -- we'll learn why in EDS 221 (tidy data) ----
-approx_lk_df <- data.frame(approx_lk) %>% 
-  pivot_longer(cols = c(x,y), names_to = "species", values_to = "population")
+# We really want this to be a data frame, and we want both prey (V) and predator (P) to be in the same column -- we'll learn why in EDS 221 (tidy data) ----
+approx_lk_df <- data.frame(approx_lk) |> 
+  pivot_longer(cols = c(V, P), names_to = "species", values_to = "population")
 
 # Plot it ----
 ggplot(data = approx_lk_df, aes(x = time, y = population)) +
@@ -99,10 +101,55 @@ ggplot(data = approx_lk_df, aes(x = time, y = population)) +
 
 What happens as you change the different parameters (and re-run the entire code chunk)? How does that align with what you see in the graph? Some things to keep in mind:
 
--   $\alpha$ is a growth rate for prey
--   $\gamma$ is a mortality rate for predator
+-   $r$ is a growth rate for prey
+-   $q$ is a mortality rate for predator
 
 #### Now change something
 
+::: {.callout-tip collapse=true}
+## One possible change
+
+Update $r$ and $q$ to:
+
+  - $r$ =  0.5 (was 0.75)
+  - $q$ = 2 (was 1)
+
+```{r}
+# Create a sequence of times (days) ----
+time <- seq(0, 25, by = 0.05)
+
+# Set some parameter values (these can change - keep it in mind) ----
+parameters <- c(r = 0.5, alpha = 0.8, beta = 0.5, q = 2)
+
+# Set the initial condition (prey and predator populations at t = 0) ----
+# Recall: V = prey, P = predator
+init_cond <- c(V = 10, P = 4)
+
+# Prepare the series of differential equations as a function ----
+lk_equations <- function(time, init_cond, parameters) {
+  with(as.list(c(init_cond, parameters)), {
+    dVdt = r * V - alpha * V * P
+    dPdt = beta * V * P - q * P
+    return(list(c(dVdt, dPdt)))
+  })
+}
+
+# Find the approximate the solution using `deSolve::ode()` ----
+approx_lk <- ode(y = init_cond, times = time, func = lk_equations, parms = parameters)
+
+# Check the class ----
+class(approx_lk)
+
+# We really want this to be a data frame, and we want both prey (V) and predator (P) to be in the same column -- we'll learn why in EDS 221 (tidy data) ----
+approx_lk_df <- data.frame(approx_lk) |> 
+  pivot_longer(cols = c(V, P), names_to = "species", values_to = "population")
+
+# Plot it ----
+ggplot(data = approx_lk_df, aes(x = time, y = population)) +
+  geom_line(aes(color = species))
+```
+:::
+
 #### Change something else!
 
+You try!
