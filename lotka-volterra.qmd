@@ -29,7 +29,7 @@ As described in lecture, the Lotka-Volterra models have been used to describe pr
 
 ### i. Prey equation:
 
-$$\frac{dx}{dt}=\alpha x-\beta xy$$
+$$\frac{dV}{dt}=r V-\alpha VP$$
 
 From Wikipedia: 
 
@@ -37,7 +37,7 @@ From Wikipedia:
 
 ### iii. Predator equation:
 
-$$\frac{dy}{dt}=\delta xy - \gamma y$$
+$$\frac{dP}{dt}=\beta VP - qP$$
 
 From Wikipedia: 
 
@@ -45,9 +45,9 @@ From Wikipedia:
 
 **Where:**
 
--   $x$ is prey population (e.g. rabbits)
--   $y$ is predator population (e.g. wolves)
--   $\alpha, \beta, \gamma, \delta$ are positive parameters
+-   $V$ is prey (victim) population (e.g. rabbits)
+-   $P$ is predator population (e.g. wolves)
+-   $r, \alpha, \beta, q$ are positive parameters
 
 ### iii. Solving in R:
 
