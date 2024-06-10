@@ -47,8 +47,8 @@ From Wikipedia (*but parameters changed to match Nicholas Gotelli's, [A Primer o
 
 **Where:**
 
--   $V$ is prey (victim) population (e.g. rabbits)
--   $P$ is predator population (e.g. wolves)
+-   $V$ is prey (**V**ictim) population (e.g. rabbits)
+-   $P$ is **P**redator population (e.g. wolves)
 -   $r, \alpha, \beta, q$ are positive parameters
 
 ### iii. Solving in R:
