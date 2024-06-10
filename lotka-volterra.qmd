@@ -35,7 +35,7 @@ $$\frac{dV}{dt}=r V-\alpha VP$$
 
 From Wikipedia (*but parameters changed to match Nicholas Gotelli's, [A Primer of Ecology](https://global.oup.com/academic/product/a-primer-of-ecology-9780878933181?cc=ca&lang=en&)*): 
 
->"The prey are assumed to have an unlimited food supply and to reproduce exponentially, unless subject to predation; this exponential growth is represented in the equation above by the term $\alpha x$. The rate of predation upon the prey is assumed to be proportional to the rate at which the predators and the prey meet, this is represented above by $\alpha VP$. If either $V$ or $P$ is zero, then there can be no predation."
+>"The prey are assumed to have an unlimited food supply and to reproduce exponentially, unless subject to predation; this exponential growth is represented in the equation above by the term $rV$. The rate of predation upon the prey is assumed to be proportional to the rate at which the predators and the prey meet, this is represented above by $\alpha VP$. If either $V$ or $P$ is zero, then there can be no predation."
 
 ### iii. Predator equation:
 
@@ -43,7 +43,7 @@ $$\frac{dP}{dt}=\beta VP - qP$$
 
 From Wikipedia (*but parameters changed to match Nicholas Gotelli's, [A Primer of Ecology](https://global.oup.com/academic/product/a-primer-of-ecology-9780878933181?cc=ca&lang=en&)*): 
 
->"In this equation, $\beta VP$ represents the growth of the predator population. (Note the similarity to the predation rate; however, a different constant is used, as the rate at which the predator population grows is not necessarily equal to the rate at which it consumes the prey). The term $\delta P$ represents the loss rate of the predators due to either natural death or emigration, it leads to an exponential decay in the absence of prey."
+>"In this equation, $\beta VP$ represents the growth of the predator population. (Note the similarity to the predation rate; however, a different constant is used, as the rate at which the predator population grows is not necessarily equal to the rate at which it consumes the prey). The term $qP$ represents the loss rate of the predators due to either natural death or emigration, it leads to an exponential decay in the absence of prey."
 
 **Where:**
 
