@@ -74,7 +74,7 @@ parameters <- c(r = .75, alpha = 0.8, beta = 0.5, q = 1)
 init_cond <- c(V = 10, P = 4)
 
 # Prepare the series of differential equations as a function ----
-lk_equations <- function(time, init_cond, parameters) {
+lv_equations <- function(time, init_cond, parameters) {
   with(as.list(c(init_cond, parameters)), {
     dVdt = r * V - alpha * V * P
     dPdt = beta * V * P - q * P
@@ -83,47 +83,93 @@ lk_equations <- function(time, init_cond, parameters) {
 }
 
 # Find the approximate the solution using `deSolve::ode()` ----
-approx_lk <- ode(y = init_cond, times = time, func = lk_equations, parms = parameters)
+approx_lv <- ode(y = init_cond, times = time, func = lv_equations, parms = parameters)
 
 # Check the class ----
-class(approx_lk)
+class(approx_lv)
 
 # We really want this to be a data frame, AND we want both prey (V) and predator (P) to be in the same column -- we'll learn why in EDS 221 (tidy data) ----
-approx_lk_df <- data.frame(approx_lk) |> 
+approx_lk_df <- data.frame(approx_lv) |> 
   pivot_longer(cols = c(V, P), names_to = "species", values_to = "population")
 
 # Plot it ----
 ggplot(data = approx_lk_df, aes(x = time, y = population)) +
-  geom_line(aes(color = species), size = 1.2)
+  geom_line(aes(color = species), linewidth = 1.2)
 ```
 
 ### iv. Updating parameter values
 
 What happens as you change the different parameters (and re-run the entire code chunk)? How does that align with what you see in the graph? Some things to keep in mind:
 
--   $r$ is a growth rate for prey
--   $q$ is a mortality rate for predator
+- $r$ is a growth rate for prey
+- $q$ is a mortality rate for predator
+- $\alpha$ is the capture efficiency of the predators
+- $\beta$ is a measure of conversion efficiency
 
-#### Now change something
+Try on your own first before taking a peek at the example changes in the dropdown, below.
+
+<!-- ::: {.callout-tip collapse=true} -->
+<!-- ## Updating initial conditions $V$ and $P$ -->
+
+<!-- Update initial conditions, $V$ and $P$ to: -->
+
+<!--   - $V$ = 1 (was 10) -->
+<!--   - $P$ = 3 (was 4) -->
+
+<!-- ```{r} -->
+<!-- # Create a sequence of times (days) ---- -->
+<!-- time <- seq(0, 50, by = 0.05) -->
+
+<!-- # Set some parameter values (these can change - keep it in mind) ---- -->
+<!-- parameters <- c(r = 0.75, alpha = 0.8, beta = 0.5, q = 1) -->
+
+<!-- # Set the initial condition (prey and predator populations at t = 0) ---- -->
+<!-- # Recall: V = prey, P = predator -->
+<!-- init_cond <- c(V = 1, P = 3) -->
+
+<!-- # Prepare the series of differential equations as a function ---- -->
+<!-- lk_equations <- function(time, init_cond, parameters) { -->
+<!--   with(as.list(c(init_cond, parameters)), { -->
+<!--     dVdt = r * V - alpha * V * P -->
+<!--     dPdt = beta * V * P - q * P -->
+<!--     return(list(c(dVdt, dPdt))) -->
+<!--   }) -->
+<!-- } -->
+
+<!-- # Find the approximate the solution using `deSolve::ode()` ---- -->
+<!-- approx_lk <- ode(y = init_cond, times = time, func = lk_equations, parms = parameters) -->
+
+<!-- # Check the class ---- -->
+<!-- class(approx_lk) -->
+
+<!-- # We really want this to be a data frame, and we want both prey (V) and predator (P) to be in the same column -- we'll learn why in EDS 221 (tidy data) ---- -->
+<!-- approx_lk_df <- data.frame(approx_lk) |>  -->
+<!--   pivot_longer(cols = c(V, P), names_to = "species", values_to = "population") -->
+
+<!-- # Plot it ---- -->
+<!-- ggplot(data = approx_lk_df, aes(x = time, y = population)) + -->
+<!--   geom_line(aes(color = species), linewidth = 1.2) -->
+<!-- ``` -->
+<!-- ::: -->
 
 ::: {.callout-tip collapse=true}
-## One possible change
+## Updating parameters $r$ and $q$
 
-Update initial conditions, $V$ and $P$ to:
+Update parameter values, $r$ and $q$ to:
 
-  - $V$ = 1 (was 10)
-  - $P$ = 3 (was 4)
-
+  - $r$ =  1 (was 0.75)
+  - $q$ =  0.5 (was 1)
+  
 ```{r}
 # Create a sequence of times (days) ----
 time <- seq(0, 50, by = 0.05)
 
 # Set some parameter values (these can change - keep it in mind) ----
-parameters <- c(r = 0.75, alpha = 0.8, beta = 0.5, q = 1)
+parameters <- c(r = 1, alpha = 0.8, beta = 0.5, q = 0.5)
 
 # Set the initial condition (prey and predator populations at t = 0) ----
 # Recall: V = prey, P = predator
-init_cond <- c(V = 1, P = 3)
+init_cond <- c(V = 10, P = 4)
 
 # Prepare the series of differential equations as a function ----
 lk_equations <- function(time, init_cond, parameters) {
@@ -146,7 +192,7 @@ approx_lk_df <- data.frame(approx_lk) |>
 
 # Plot it ----
 ggplot(data = approx_lk_df, aes(x = time, y = population)) +
-  geom_line(aes(color = species), size = 1.2)
+  geom_line(aes(color = species), linewidth = 1.2)
 ```
 :::
 
