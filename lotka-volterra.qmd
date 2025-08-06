@@ -2,7 +2,7 @@
 title: "Lotka-Volterra Example"
 subtitle: "Numerical approximations"
 description: "Day 3, morning interactive session"
-date: 2024-08-07
+date: 2025-08-06
 format: html
 toc: true
 editor_options: 
