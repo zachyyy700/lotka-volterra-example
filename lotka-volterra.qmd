@@ -75,7 +75,7 @@ parameters <- c(r = .75, alpha = 0.8, beta = 0.5, q = 1)
 
 # Set the initial condition (prey and predator populations at t = 0) ----
 # Recall: V = prey, P = predator
-init_cond <- c(V = 10, P = 4)
+init_cond <- c(V = 10, P = 5)
 
 # Prepare the series of differential equations as a function ----
 lv_equations <- function(time, init_cond, parameters) {
@@ -100,6 +100,8 @@ approx_lk_df <- data.frame(approx_lv) |>
 ggplot(data = approx_lk_df, aes(x = time, y = population)) +
   geom_line(aes(color = species), linewidth = 1.2)
 ```
+
+#.................Insert Zootopia Reference Here.................
 
 ### iv. Try updating initial conditions and / or parameters
 
